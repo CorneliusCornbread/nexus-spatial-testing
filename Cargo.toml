@@ -1,0 +1,16 @@
+[workspace]
+members = [
+    "spatial-weaver/spatial-weaver-lib",
+    "spatial-weaver/spatial-weaver-bevy",
+]
+
+[workspace.package]
+version = "0.0.0"
+license = "MIT OR BSD-2-Clause-Patent OR Apache-2.0"
+repository = ""
+edition = "2021"
+rust-version = "1.78.0"
+
+[workspace.dependencies]
+bevy = "0.13"
+bevy_rapier3d = "0.26.0"
