@@ -1,3 +1,5 @@
+mod interactors;
+
 use bevy::{
     ecs::{
         component::Component,
@@ -8,9 +10,11 @@ use bevy::{
     math::Vec3,
     transform::components::GlobalTransform,
 };
-use bevy_rapier3d::plugin::RapierContext;
-
-use crate::Interactor3D;
+use bevy_rapier3d::{
+    plugin::RapierContext,
+    rapier::geometry::{ColliderBuilder, InteractionGroups},
+};
+use interactors::Interactor3D;
 
 #[derive(Component)]
 pub struct BevyButton3D {

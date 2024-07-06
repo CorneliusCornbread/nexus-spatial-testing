@@ -1,27 +1,23 @@
-pub mod config;
+pub mod context;
 pub mod input_field;
 
-use bevy::{app::Plugin, ecs::component::Component};
+use bevy::app::Plugin;
 use bevy_rapier3d::{
-    geometry::Group,
     plugin::{NoUserData, RapierPhysicsPlugin},
+    rapier::geometry::Group,
     render::RapierDebugRenderPlugin,
 };
-use config::SpatialWeaverConfig;
+use context::WeaverContext;
 
 pub mod ui;
 
-#[derive(Component)]
-pub struct Interactor3D {}
-
-#[derive(Component)]
-pub struct Interactor2D {}
-
-const DEFAULT_COL_GROUP: Group = Group::GROUP_9;
+const DEFAULT_COL_GROUP: Group = Group::GROUP_9; // Group that the colliders are a part of
+const DEFAULT_FILTER_GROUP: Group = Group::GROUP_10; // Group that the colliders filter for/expect collision from
 
 pub struct SpatialWeaverPlugin {
     add_rapier: bool,
-    collision_group: Group,
+    collider_group: Group,
+    filter_group: Group,
 }
 
 impl Plugin for SpatialWeaverPlugin {
@@ -31,7 +27,10 @@ impl Plugin for SpatialWeaverPlugin {
                 .add_plugins(RapierDebugRenderPlugin::default());
         }
 
-        app.insert_resource(SpatialWeaverConfig(self.collision_group));
+        app.insert_resource(WeaverContext {
+            collider_group: self.collider_group,
+            filter_group: self.filter_group,
+        });
     }
 }
 
@@ -39,7 +38,8 @@ impl Default for SpatialWeaverPlugin {
     fn default() -> Self {
         Self {
             add_rapier: true,
-            collision_group: DEFAULT_COL_GROUP,
+            collider_group: DEFAULT_COL_GROUP,
+            filter_group: DEFAULT_FILTER_GROUP,
         }
     }
 }
@@ -48,14 +48,16 @@ impl SpatialWeaverPlugin {
     pub fn no_rapier_autoconfig() -> Self {
         Self {
             add_rapier: false,
-            collision_group: DEFAULT_COL_GROUP,
+            collider_group: DEFAULT_COL_GROUP,
+            filter_group: DEFAULT_FILTER_GROUP,
         }
     }
 
-    pub fn new(add_rapier: bool, collision_group: Group) -> Self {
+    pub fn new(add_rapier: bool, collider_group: Group, filter_group: Group) -> Self {
         Self {
             add_rapier,
-            collision_group,
+            collider_group,
+            filter_group,
         }
     }
 }
