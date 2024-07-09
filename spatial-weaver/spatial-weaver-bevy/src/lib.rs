@@ -1,5 +1,5 @@
-pub mod context;
 pub mod input_field;
+pub mod ui;
 
 use bevy::app::Plugin;
 use bevy_rapier3d::{
@@ -7,9 +7,7 @@ use bevy_rapier3d::{
     rapier::geometry::Group,
     render::RapierDebugRenderPlugin,
 };
-use context::WeaverContext;
-
-pub mod ui;
+use ui::context::WeaverContext;
 
 const DEFAULT_COL_GROUP: Group = Group::GROUP_9; // Group that the colliders are a part of
 const DEFAULT_FILTER_GROUP: Group = Group::GROUP_10; // Group that the colliders filter for/expect collision from

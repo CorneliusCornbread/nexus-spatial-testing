@@ -1,4 +1,5 @@
-mod interactors;
+pub mod context;
+pub mod interactors;
 
 use bevy::{
     ecs::{
