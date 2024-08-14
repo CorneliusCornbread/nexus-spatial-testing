@@ -1,30 +1,17 @@
+pub mod button;
 pub mod context;
 pub mod interactors;
 
 use bevy::{
     ecs::{
-        component::Component,
         entity::Entity,
         system::{Query, Res},
         world::World,
     },
-    math::Vec3,
     transform::components::GlobalTransform,
 };
-use bevy_rapier3d::{
-    plugin::RapierContext,
-    rapier::geometry::{ColliderBuilder, InteractionGroups},
-};
+use bevy_rapier3d::plugin::RapierContext;
 use interactors::Interactor3D;
-
-#[derive(Component)]
-pub struct BevyButton3D {
-    min_pressure_percent: f32,
-    pressure_release_percent: f32,
-    current_pressure: f32,
-    is_pressed: bool,
-    collider_bounds: Vec3,
-}
 
 fn check_ui_intersections(
     pointer: Query<(Entity, &Interactor3D)>,

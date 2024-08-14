@@ -1,5 +1,5 @@
 use bevy::prelude::Resource;
-use bevy_rapier3d::rapier::geometry::{ColliderBuilder, Group, InteractionGroups};
+use bevy_rapier3d::geometry::{CollisionGroups, Group};
 
 #[derive(Resource)]
 pub struct WeaverContext {
@@ -7,28 +7,30 @@ pub struct WeaverContext {
     pub(crate) filter_group: Group,
 }
 
-trait WeaverBuilder {
-    /// Sets the current collider to have the collision rules needed for weaver interactables.
-    /// Will override any existing collision rules previously set.
-    fn make_weaver_collider(self, ctx: &WeaverContext) -> Self;
-
-    /// Adds the collision rules needed to interact with weaver interactables.
-    /// Will keep existing collision rules previously set.
-    fn make_weaver_interactor(self, ctx: &WeaverContext) -> Self;
-}
-
-impl WeaverBuilder for ColliderBuilder {
-    fn make_weaver_collider(self, ctx: &WeaverContext) -> Self {
-        self.collision_groups(InteractionGroups::new(ctx.collider_group, ctx.filter_group))
+impl WeaverContext {
+    /// Creates the collision rules needed for weaver interactables.
+    pub fn interactable_col_groups(&self) -> CollisionGroups {
+        CollisionGroups::new(self.collider_group, self.filter_group)
     }
 
-    fn make_weaver_interactor(self, ctx: &WeaverContext) -> Self {
-        let groups = self.collision_groups;
-        let new_groups = InteractionGroups::new(
-            groups.memberships | ctx.collider_group,
-            groups.filter | ctx.filter_group,
-        );
+    /// Adds the collision rules needed to interact with weaver interactables to
+    /// the current given collision rules.
+    pub fn interactor_col_groups(
+        &self,
+        CollisionGroups {
+            memberships,
+            filters,
+        }: CollisionGroups,
+    ) -> CollisionGroups {
+        CollisionGroups::new(
+            memberships | self.filter_group,
+            filters | self.collider_group,
+        )
+    }
 
-        self.collision_groups(new_groups)
+    /// Adds the collision rules needed to interact with weaver interactables to
+    /// the current given collision rules.
+    pub fn exclusive_interactor_col_groups(&self) -> CollisionGroups {
+        CollisionGroups::new(self.filter_group, self.collider_group)
     }
 }

@@ -3,8 +3,8 @@ pub mod ui;
 
 use bevy::app::Plugin;
 use bevy_rapier3d::{
+    geometry::Group,
     plugin::{NoUserData, RapierPhysicsPlugin},
-    rapier::geometry::Group,
     render::RapierDebugRenderPlugin,
 };
 use ui::context::WeaverContext;
