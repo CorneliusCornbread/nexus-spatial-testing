@@ -11,6 +11,9 @@ pub struct BevyButton3D {
 }
 
 impl BevyButton3D {
+    /// Compares the current pressure to the activate pressure.
+    /// If the button was pressed then the pressure must be below the release pressure
+    /// for the button to no longer be in its "pressed" state.
     pub fn is_pressed(&mut self) -> bool {
         if self.pressed {
             if self.current_pressure <= self.release_pressure {

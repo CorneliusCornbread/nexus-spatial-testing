@@ -19,6 +19,8 @@ pub struct ButtonRapier {
 }
 
 impl ButtonRapier {
+    /// Creates a new button using rapier physics and a given x, y, and z size.
+    /// Requires the current weaver context for collision group information.
     pub fn new(ctx: &WeaverContext, hx: f32, hy: f32, hz: f32) -> Self {
         Self {
             rigid_body: BUTTON_RB_TYPE,
